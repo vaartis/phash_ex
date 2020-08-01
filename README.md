@@ -1,4 +1,6 @@
-# PHash ![Hex.pm](https://img.shields.io/hexpm/v/phash) ![Hex.pm](https://img.shields.io/hexpm/dt/phash)
+# PHash
+[![Hex.pm](https://img.shields.io/hexpm/v/phash)](https://hex.pm/packages/phash)
+[![Hex.pm](https://img.shields.io/hexpm/dt/phash)](https://hex.pm/packages/phash)
 
 This library provides NIF bindings to [phash](https://phash.org) and is provided under the same license (GNU GPL).
 
