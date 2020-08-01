@@ -14,3 +14,5 @@ def deps do
 end
 ```
 
+Note that this requires you to have GCC/G++ and CMake installed to build the C++ code of the library. Any dependencies
+that pHash by itself requires may also need to be installed (the CMake build script will tell exactly which are needed).
