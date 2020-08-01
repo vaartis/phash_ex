@@ -1,0 +1,3 @@
+[submodule "c_lib/pHash"]
+	path = c_lib/pHash
+	url = https://github.com/aetilius/pHash

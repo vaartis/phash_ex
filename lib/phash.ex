@@ -1,0 +1,40 @@
+defmodule PHash do
+  alias PHash.NIFs
+
+  @doc """
+  Reads an image from a path and produces a hash that can be compared
+  with another hash via `PHash.image_hash_distance/2`.
+  """
+  def image_file_hash(image_path) when is_binary(image_path) do
+    if File.exists?(image_path) do
+      NIFs.image_hash(image_path)
+    else
+      {:error, :enoent}
+    end
+  end
+
+  @doc """
+  Write the image binary data to a temporary file and produces the same result
+  as `PHash.image_file_hash/1` using that file.
+  """
+  def image_binary_hash(image_data) when is_binary(image_data) do
+    Temp.track!()
+
+    result =
+      with {:ok, file_path} <- Temp.open([prefix: "phash"], &IO.binwrite(&1, image_data)) do
+        image_file_hash(file_path)
+      end
+
+    Temp.cleanup()
+
+    result
+  end
+
+  @doc """
+  Calculates the hamming distance between two image hashes.
+  """
+  def image_hash_distance(hash_a, hash_b)
+      when is_integer(hash_a) and is_integer(hash_b) and hash_a > 0 and hash_b > 0 do
+    NIFs.image_hash_distance(hash_a, hash_b)
+  end
+end
