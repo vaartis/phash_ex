@@ -2,7 +2,7 @@ defmodule PHash.NIFs do
   @on_load :load_nifs
 
   def load_nifs do
-    lib_path = Path.join(Mix.Project.build_path(), "phash_nifs")
+    lib_path = Path.join(Mix.Project.build_path(), "../../priv/phash_nifs")
     :erlang.load_nif(to_charlist(lib_path), 0)
   end
 

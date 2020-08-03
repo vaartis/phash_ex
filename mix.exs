@@ -5,10 +5,10 @@ defmodule Mix.Tasks.Compile.PHash do
   FIXME: This seems to run every time when tests are run, strangely.
   """
   def run(_args) do
-    priv = :code.priv_dir(:phash)
+    priv = Path.join(Mix.Project.build_path(), "../../priv")
 
     files = [
-      {"c_lib/pHash/src/pHash.cpp", "#{priv}/libpHash.so"},
+      {"c_lib/pHash/src/pHash.cpp", "#{priv}/libpHash.so.1.0.0"},
       {"c_lib/phash_nifs.cpp", "#{priv}/phash_nifs.so"}
     ]
 
@@ -115,6 +115,7 @@ defmodule PHash.MixProject do
           [
             "lib",
             "test",
+            "priv",
             "mix.exs",
             "README.md",
             "LICENSE",
