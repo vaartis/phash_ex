@@ -5,9 +5,11 @@ defmodule Mix.Tasks.Compile.PHash do
   FIXME: This seems to run every time when tests are run, strangely.
   """
   def run(_args) do
+    priv = :code.priv_dir(:phash)
+
     files = [
-      {"c_lib/pHash/src/pHash.cpp", "#{Mix.Project.build_path()}/libpHash.so"},
-      {"c_lib/phash_nifs.cpp", "#{Mix.Project.build_path()}/phash_nifs.so"}
+      {"c_lib/pHash/src/pHash.cpp", "#{priv}/libpHash.so"},
+      {"c_lib/phash_nifs.cpp", "#{priv}/phash_nifs.so"}
     ]
 
     should_rebuild =
@@ -55,7 +57,7 @@ defmodule Mix.Tasks.Compile.PHash do
              ),
            File.cp!(
              "c_lib/pHash/Release/libpHash.so.1.0.0",
-             "#{Mix.Project.build_path()}/libpHash.so.1.0.0"
+             "#{priv}/libpHash.so.1.0.0"
            ),
            erlang_root <-
              to_string(:code.root_dir() ++ '/erts-' ++ :erlang.system_info(:version)),
@@ -71,8 +73,8 @@ defmodule Mix.Tasks.Compile.PHash do
                  "-lpHash",
                  "-fpic",
                  "-shared",
-                 "-Wl,-rpath=#{Mix.Project.build_path()}",
-                 "-o#{Mix.Project.build_path()}/phash_nifs.so"
+                 "-Wl,-rpath=#{priv}",
+                 "-o#{priv}/phash_nifs.so"
                ],
                cd: "c_lib",
                stderr_to_stdout: true,
