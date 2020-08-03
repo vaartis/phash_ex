@@ -142,6 +142,10 @@ defmodule PHash.MixProject do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    [{:temp, "~> 0.4"}, {:ex_doc, "~> 0.22", only: :dev}]
+    [
+      {:temp, "~> 0.4"},
+      {:ex_doc, "~> 0.22", only: :dev},
+      {:unsafe, "~> 1.0"}
+    ]
   end
 end

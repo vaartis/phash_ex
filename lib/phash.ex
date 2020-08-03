@@ -1,4 +1,6 @@
 defmodule PHash do
+  use Unsafe.Generator, docs: true
+
   alias PHash.NIFs
 
   @doc """
@@ -48,5 +50,24 @@ defmodule PHash do
   def image_hash_distance(hash_a, hash_b)
       when is_integer(hash_a) and is_integer(hash_b) and hash_a > 0 and hash_b > 0 do
     NIFs.image_hash_distance(hash_a, hash_b)
+  end
+
+  @unsafe [
+    {:image_file_hash, 1, :unwrap},
+    {:image_binary_hash, 2, :unwrap}
+  ]
+
+  defp unwrap({:ok, result}), do: result
+  defp unwrap({:error, err}), do: raise(PHash.HashingError, err)
+end
+
+defmodule PHash.HashingError do
+  defexception [:message]
+
+  @impl true
+  def exception(error) do
+    %PHash.HashingError{
+      message: "Hashing failed: #{error}"
+    }
   end
 end
