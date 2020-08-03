@@ -7,7 +7,11 @@ defmodule PHash do
   """
   def image_file_hash(image_path) when is_binary(image_path) do
     if File.exists?(image_path) do
-      NIFs.image_hash(image_path)
+      if File.dir?(image_path) do
+        {:error, :eisdir}
+      else
+        NIFs.image_hash(image_path)
+      end
     else
       {:error, :enoent}
     end
