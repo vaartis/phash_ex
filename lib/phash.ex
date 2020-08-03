@@ -16,12 +16,19 @@ defmodule PHash do
   @doc """
   Write the image binary data to a temporary file and produces the same result
   as `PHash.image_file_hash/1` using that file.
+
+  ## Options:
+  - `extension` - an extension to be added to the temporary file created (e.g. ".gif")
+                  (default: "")
   """
-  def image_binary_hash(image_data) when is_binary(image_data) do
+  def image_binary_hash(image_data, opts \\ []) when is_binary(image_data) do
     Temp.track!()
 
+    ext = opts[:extension] || ""
+
     result =
-      with {:ok, file_path} <- Temp.open([prefix: "phash"], &IO.binwrite(&1, image_data)) do
+      with {:ok, file_path} <-
+             Temp.open([prefix: "phash", suffix: ext], &IO.binwrite(&1, image_data)) do
         image_file_hash(file_path)
       end
 
