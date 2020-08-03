@@ -54,7 +54,7 @@ defmodule PHash do
 
   @unsafe [
     {:image_file_hash, 1, :unwrap},
-    {:image_binary_hash, 2, :unwrap}
+    {:image_binary_hash, [1, 2], :unwrap}
   ]
 
   defp unwrap({:ok, result}), do: result
