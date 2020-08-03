@@ -25,8 +25,7 @@ defmodule PHash do
 
   ## Options:
   - `extension` - an extension to be added to the temporary file created (e.g. ".gif")
-                  (default: ""). Note that some image formats _require_ an extension specified
-                  to be recognized (gif is one).
+                  (default: "").
   """
   def image_binary_hash(image_data, opts \\ []) when is_binary(image_data) do
     Temp.track!()
