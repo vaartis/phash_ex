@@ -63,4 +63,14 @@ ErlNifFunc nif_funcs[] = {
     {"image_hash_distance", 2, image_hash_distance_nif}
 };
 
-ERL_NIF_INIT(Elixir.PHash.NIFs, nif_funcs, nullptr, nullptr, nullptr, nullptr);
+int phash_nif_load(ErlNifEnv *env, void **priv_data, ERL_NIF_TERM load_info) {
+    return 0;
+}
+
+int phash_nif_upgrade(ErlNifEnv *env, void **priv_data, void **old_priv_data, ERL_NIF_TERM load_info) {
+    return 0;
+}
+
+void phash_nif_unload(ErlNifEnv *env, void *priv_data) { }
+
+ERL_NIF_INIT(Elixir.PHash.NIFs, nif_funcs, phash_nif_load, nullptr, phash_nif_upgrade, phash_nif_unload);
