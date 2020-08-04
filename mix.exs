@@ -50,7 +50,7 @@ defmodule Mix.Tasks.Compile.PHash do
            {_, 0} <-
              System.cmd(
                "cmake",
-               ["--build", ".", "--target", "pHash"],
+               ["--build", ".", "--target", "pHash", "--jobs", "#{System.schedulers_online()}"],
                cd: "c_lib/pHash",
                stderr_to_stdout: true,
                into: IO.stream(:stdio, :line)
