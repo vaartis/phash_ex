@@ -110,7 +110,7 @@ defmodule PHash.MixProject do
         links: %{
           "GitHub" => "https://github.com/vaartis/phash_ex/"
         },
-        licenses: ["GPL-3"],
+        licenses: ["GPL-3.0-or-later"],
         files:
           [
             "lib",
