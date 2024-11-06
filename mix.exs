@@ -50,7 +50,7 @@ defmodule Mix.Tasks.Compile.PHash do
            {_, 0} <-
              System.cmd(
                "cmake",
-               ["--build", ".", "--target", "pHash", "--jobs", "#{System.schedulers_online()}"],
+               ["--build", ".", "--target", "pHash"],
                cd: "c_lib/pHash",
                stderr_to_stdout: true,
                into: IO.stream(:stdio, :line)
@@ -60,7 +60,7 @@ defmodule Mix.Tasks.Compile.PHash do
              "#{priv}/libpHash.so.1.0.0"
            ),
            erlang_root <-
-             to_string(:code.root_dir() ++ '/erts-' ++ :erlang.system_info(:version)),
+             to_string(:code.root_dir() ++ ~c"/erts-" ++ :erlang.system_info(:version)),
            {_, 0} <-
              System.cmd(
                "g++",
