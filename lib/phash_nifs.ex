@@ -2,7 +2,7 @@ defmodule PHash.NIFs do
   @on_load :load_nifs
 
   def load_nifs do
-    lib_path = Path.join(__DIR__, "../priv/phash_nifs")
+    lib_path = Path.expand("../priv/phash_nifs", __DIR__)
     :erlang.load_nif(to_charlist(lib_path), 0)
   end
 

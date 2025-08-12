@@ -47,7 +47,7 @@ ERL_NIF_TERM image_hash_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
 }
 
 ERL_NIF_TERM image_hash_distance_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) {
-    ulong64 a, b;
+    ErlNifUInt64 a, b;
 
     // Once again, the type checking is done on the elixir side
     enif_get_uint64(env, argv[0], &a);
