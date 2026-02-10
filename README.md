@@ -7,6 +7,8 @@ This library provides NIF bindings to [phash](https://phash.org) and is provided
 
 ## Installation
 
+### From Hex.pm (Recommended)
+
 The package can be installed by adding `phash` to your list of dependencies in `mix.exs`:
 
 ```elixir
@@ -16,6 +18,22 @@ def deps do
   ]
 end
 ```
+
+Then run `mix deps.get` and the library will build automatically. **All required source files are included in the Hex package** - you don't need to worry about git submodules.
+
+### From Source (Development)
+
+If you're contributing to this library, clone the repository and initialize git submodules:
+
+```bash
+git clone https://github.com/vaartis/phash_ex.git
+cd phash_ex
+git submodule update --init --recursive
+mix deps.get
+mix compile
+```
+
+> **Note:** Git submodules are only needed for development. Users installing from Hex.pm get all source files automatically.
 
 ## Requirements
 

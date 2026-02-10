@@ -1,5 +1,9 @@
 name: CI
 
+# Note: This CI tests building from the git repository.
+# When installed from Hex.pm, the pHash source files are included in the package,
+# so submodules are not needed by end users.
+
 on:
   push:
     branches: [ main, master ]
@@ -26,6 +30,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Install system dependencies
         run: |
@@ -87,6 +93,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Install system dependencies
         run: |

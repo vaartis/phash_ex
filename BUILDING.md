@@ -56,12 +56,45 @@ sudo pacman -S base-devel cmake libpng libjpeg-turbo libtiff
 
 ## Build Process
 
-The build process is handled automatically by Mix when you run:
+### Installing from Hex.pm (Recommended)
+
+When you install this package as a dependency from Hex.pm, all required source files are already included in the package. Simply add it to your `mix.exs`:
+
+```elixir
+def deps do
+  [
+    {:phash, "~> 0.1"}
+  ]
+end
+```
+
+Then run:
 
 ```bash
 mix deps.get
 mix compile
 ```
+
+The build will happen automatically, and you don't need to worry about git submodules.
+
+### Building from Source (Development)
+
+If you're developing this library or cloning from GitHub, the pHash C++ library is included as a git submodule. After cloning the repository, initialize the submodules:
+
+```bash
+git clone https://github.com/vaartis/phash_ex.git
+cd phash_ex
+git submodule update --init --recursive
+```
+
+Then build:
+
+```bash
+mix deps.get
+mix compile
+```
+
+**Note:** The pHash source files are included in the Hex package, so end users installing from Hex.pm don't need to deal with git submodules. Submodules are only needed for development from the git repository.
 
 ### Build Steps
 
