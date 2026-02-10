@@ -1,0 +1,129 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: Test on Ubuntu (Elixir ${{matrix.elixir}} / OTP ${{matrix.otp}})
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        include:
+          # Latest stable versions
+          - elixir: '1.19'
+            otp: '28'
+          # Previous stable versions
+          - elixir: '1.18'
+            otp: '27'
+          - elixir: '1.17'
+            otp: '26'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            libpng-dev \
+            libjpeg-dev \
+            libtiff-dev
+
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-mix-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-${{ matrix.otp }}-${{ matrix.elixir }}-
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Compile
+        run: mix compile --warnings-as-errors
+
+      - name: Check formatting
+        run: mix format --check-formatted
+
+      - name: Run tests
+        run: mix test
+
+      - name: Verify library loads correctly
+        run: |
+          mix run -e '
+            {:ok, hash} = PHash.image_file_hash("test/fixtures/test_image.png")
+            IO.puts("Successfully computed hash: #{hash}")
+            
+            distance = PHash.image_hash_distance(hash, hash)
+            if distance == 0 do
+              IO.puts("Distance test passed: identical images have distance 0")
+            else
+              IO.puts("ERROR: Distance should be 0, got #{distance}")
+              exit(1)
+            end
+          '
+
+  build-check:
+    name: Build Check on Ubuntu
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            libpng-dev \
+            libjpeg-dev \
+            libtiff-dev
+
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.19'
+          otp-version: '28'
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Clean build
+        run: mix clean
+
+      - name: Build from scratch
+        run: mix compile
+
+      - name: Verify compiled artifacts
+        run: |
+          echo "Checking for compiled libraries..."
+          ls -lh priv/
+          
+          if [ ! -f "priv/phash_nifs.so" ]; then
+            echo "ERROR: phash_nifs.so not found"
+            exit 1
+          fi
+          
+          echo "All required libraries are present"
+
+      - name: Run integration test
+        run: mix test test/phash_ex_test.exs:115
