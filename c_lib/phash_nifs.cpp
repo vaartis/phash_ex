@@ -47,11 +47,15 @@ ERL_NIF_TERM image_hash_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
 }
 
 ERL_NIF_TERM image_hash_distance_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) {
-    ulong64 a, b;
+    // Use ErlNifUInt64 for enif_get_uint64, then cast to ulong64 for pHash
+    ErlNifUInt64 temp_a, temp_b;
 
     // Once again, the type checking is done on the elixir side
-    enif_get_uint64(env, argv[0], &a);
-    enif_get_uint64(env, argv[1], &b);
+    enif_get_uint64(env, argv[0], &temp_a);
+    enif_get_uint64(env, argv[1], &temp_b);
+
+    ulong64 a = static_cast<ulong64>(temp_a);
+    ulong64 b = static_cast<ulong64>(temp_b);
 
     int result = ph_hamming_distance(a, b);
 
