@@ -99,7 +99,11 @@ defmodule Mix.Tasks.Compile.PHash do
       with {_, 0} <-
              System.cmd(
                "cmake",
-               ["-DCMAKE_BUILD_TYPE=Release", "-DBUILD_SHARED_LIBS=FALSE"] ++
+               [
+                 "-DCMAKE_BUILD_TYPE=Release",
+                 "-DBUILD_SHARED_LIBS=FALSE",
+                 "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+               ] ++
                  cmake_extra_args ++ ["."],
                cd: "c_lib/pHash",
                stderr_to_stdout: true,
@@ -266,7 +270,7 @@ defmodule PHash.MixProject do
   def project do
     [
       app: :phash,
-      version: "0.1.3",
+      version: "0.1.4",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
